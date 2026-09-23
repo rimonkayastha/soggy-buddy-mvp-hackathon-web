@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Soggy Buddy fire detection warning system." />
+    <title>Soggy Buddy</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="hackathon.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Primary navigation">
+        <a class="brand" href="#overview" aria-label="Soggy Buddy home"><span class="brand-mark">⌁</span><span>Soggy Buddy</span></a>
+        <div class="nav-section">
+          <p class="nav-label">MONITORING</p>
+          <a class="nav-item active" href="#overview"><span class="nav-icon">◈</span>Fire overview</a>
+          <a class="nav-item" href="#sensors"><span class="nav-icon">⌖</span>SUTD sensor</a>
+          <a class="nav-item" href="#alerts"><span class="nav-icon">△</span>Fire warnings</a>
+        </div>
+        <div class="nav-section">
+          <p class="nav-label">MANAGE</p>
+          <a class="nav-item" href="#sensors"><span class="nav-icon">⚙</span>Detection thresholds</a>
+        </div>
+        <div class="reserve-card"><span class="live-dot"></span><div><strong>SUTD Campus</strong><small>Live sensor reporting</small></div></div>
+      </aside>
+
+      <main>
+        <header class="page-header" id="overview">
+          <div><p class="eyebrow">FIRE DETECTION INTELLIGENCE</p><h1>Soggy Buddy fire overview</h1><p class="subhead">Live fire-risk analysis from temperature, humidity and soil moisture at SUTD.</p></div>
+          <div class="header-actions"><span class="sync-status"><i></i>Updated just now</span><button class="secondary-button" id="refresh-button" type="button">Refresh data</button></div>
+        </header>
+
+        <section class="alert-banner" id="alerts" aria-live="polite">
+          <div class="alert-symbol" id="alert-symbol">!</div><div><strong id="warning-title">Fire risk assessment waiting for live readings</strong><p id="warning-message">Soggy Buddy will evaluate all three sensor values as soon as the live connection reports them.</p></div>
+          <button class="alert-action" id="acknowledge-button" type="button">Acknowledge</button>
+        </section>
+
+        <section class="summary-grid" aria-label="Live sensor readings">
+          <article class="summary-card"><p>Temperature</p><strong id="temperature-value">--<span>°C</span></strong><small>Live sensor reading</small></article>
+          <article class="summary-card"><p>Humidity</p><strong id="humidity-value">--<span>%</span></strong><small>Live sensor reading</small></article>
+          <article class="summary-card"><p>Soil moisture</p><strong id="soil-moisture-value">--<span>%</span></strong><small>Live sensor reading</small></article>
+        </section>
+
+        <section class="monitoring-grid">
+          <article class="panel map-panel">
+            <div class="panel-heading"><div><h2>SUTD campus map</h2><p>Live location for the incoming sensor data.</p></div><span class="live-pill"><i></i>LIVE</span></div>
+            <div class="map-wrap">
+              <div class="campus-map" id="sutd-map" aria-label="Map of Singapore University of Technology and Design"></div>
+              <div class="map-caption"><span><i class="legend-dot healthy-dot"></i>SUTD sensor location</span><span>8 Somapah Road, Singapore</span></div>
+            </div>
+          </article>
+
+          <article class="panel detail-panel" id="sensors">
+            <div class="panel-heading">
+              <div><h2>SUTD readings</h2><p>Current values and fire detection thresholds.</p></div>
+              <button class="icon-button" type="button" id="view-toggle" aria-label="Toggle table density">↕</button>
+            </div>
+
+            <div class="zone-list" id="zone-list">
+              <div class="location-row"><span class="zone-indicator healthy-dot"></span><span class="zone-name"><strong>SUTD</strong><small>Single monitored location</small></span><span class="zone-reading">LIVE<small>WebSocket</small></span></div>
+            </div>
+          </article>
+        </section>
+
+        <section class="zone-insights" aria-label="SUTD location information">
+          <article class="area-status-panel">
+            <div class="area-status-heading">
+              <div><p class="profile-kicker">LOCATION STATUS</p><h2>SUTD campus</h2></div>
+              <span>1 active location</span>
+            </div>
+
+            <div class="area-status-list" role="list">
+              <article class="area-status-row" role="listitem">
+                <div class="area-name"><span class="directory-dot healthy-dot"></span><div><strong>SUTD</strong><small>Singapore University of Technology and Design</small></div></div>
+                <div><span>Address</span><b>8 Somapah Road</b></div>
+                <div><span>Data source</span><b>Live WebSocket</b></div>
+                <div><span>Sensor coverage</span><b>Incoming API data</b></div>
+                <div><span>Map status</span><b>Campus mapped</b></div>
+              </article>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <dialog class="critical-dialog" id="critical-dialog" aria-labelledby="critical-warning-title">
+      <div class="critical-dialog-heading"><span class="critical-dialog-symbol">!</span><div><p class="profile-kicker">CRITICAL FIRE WARNING</p><h2 id="critical-warning-title">Potential forest fire conditions detected</h2></div></div>
+      <p id="critical-warning-details">Multiple sensor values indicate elevated fire risk at SUTD.</p>
+      <div class="critical-dialog-location"><strong>SUTD</strong><span>8 Somapah Road, Singapore</span></div>
+      <form method="dialog"><button class="alert-action" type="submit">Acknowledge critical warning</button></form>
+    </dialog>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script src="hackathon.js"></script>
+  </body>
+</html>
