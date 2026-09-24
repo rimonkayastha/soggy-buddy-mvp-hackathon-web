@@ -55,9 +55,10 @@ function evaluateFireRisk() {
     return;
   }
 
-  const details = triggered.map((check) => (
-    `${check.name}: ${check.value}${check.threshold.unit} (${check.threshold.direction} ${check.threshold.warning}${check.threshold.unit})`
-  ));
+  const details = triggered.map((check) => {
+    const threshold = extreme.includes(check) ? check.threshold.extreme : check.threshold.warning;
+    return `${check.name}: ${check.value}${check.threshold.unit} (${check.threshold.direction} ${threshold}${check.threshold.unit})`;
+  });
   const signature = `${isCritical ? "critical" : "warning"}:${details.join("|")}`;
 
   warningTitle.textContent = isCritical
